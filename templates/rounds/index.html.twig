@@ -1,0 +1,39 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+	{% from 'macros.html.twig' import Pagination,RoundBadge %}
+	<header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+		<a href="#" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+			<span class="fs-4">All Rounds</span>
+		</a>
+	</header>
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url)}}
+	<table class="table table-bordered my-3">
+		<thead>
+			<tr>
+				<th>Round</th>
+				<th>Start</th>
+				<th>Duration</th>
+				<th>End</th>
+				<th>Mode</th>
+				<th>Result</th>
+				<th>Map</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for r in rounds %}
+				<tr class="table-{{r.getResultClass.class}}">
+					<td>{{RoundBadge(r.getId)}}</td>
+					<td>{{r.getStart|date}}</td>
+					<td>{{r.getDuration ? r.getDuration|date('%H:%I:%S') : 'N/A'}}</td>
+					<td>{{r.getEnd ? r.getEnd|date : 'N/A'}}</td>
+					<td>{{r.getMode}}</td>
+					<td>{{r.getResult}}</td>
+					<td>{{r.getMap}}</td>
+				</tr>
+			{% endfor %}
+			
+		</tbody>
+	</table>
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url)}}
+
+{% endblock %}

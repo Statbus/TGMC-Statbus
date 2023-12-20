@@ -1,0 +1,23 @@
+{% extends 'tgdb/tgdb.html.twig' %}
+
+{% block body %}
+	{% from 'macros.html.twig' import Pagination, Playerbadge, Hotbar %}
+	{{Hotbar(hotbar)}}
+	<header class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+		<span class="fs-4 mb-0">All Bans for {{bans ? Playerbadge(bans[0].getPlayerBadge) : ckey}}</span>
+		<span style="font-size: .75rem">Expired and Lifted bans are collapsed, click for details</span>
+	</header>
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url)}}
+	{% set lastdate = bans[0].getbantime|date('F Y') %}
+	<h3 class="border-bottom mb-3">{{lastdate}}</h3>
+	{% for b in bans %}
+		{% if b.getbantime|date('F Y') != lastdate %}
+			{% set lastdate = b.getbantime|date('F Y') %}
+			<h3 class="border-bottom mb-3">{{lastdate}}</h3>
+		{% endif %}
+		{% include 'bans/components/listEntry.html.twig' %}
+        {% else %}
+        <p class="lead mb-0 text-center">« No Bans »</p>
+	{% endfor %}
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url)}}
+{% endblock %}

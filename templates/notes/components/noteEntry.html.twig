@@ -1,0 +1,43 @@
+{% from 'macros.html.twig' import PlayerBadge, RoundBadge %}
+	<header class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+		<span class="fs-4">
+			<a href="#" class="icon-link">
+				<i class="fas {{note.getType.getIcon}}"></i>
+				{{note.getId}}</a>
+			{% if note.isSecret %}
+				<span class="badge text-bg-danger">SECRET</span>
+			{% endif %}
+			{{note.getSeverity.getText}}
+			{{note.getType.value|title}}
+			for
+			{{PlayerBadge(note.getTargetBadge)}}
+			by
+			{{PlayerBadge(note.getAdminBadge)}}</span>
+		<span>
+			Expires:
+			{{note.getExpiration ? note.getExpiration|date : 'No Expiration'}}
+		</span>
+	</header>
+	<div class="card mb-4 border-{{note.getSeverity.getCssClass}}">
+		<div class="card-body">
+			<blockquote class="border-4 border-start ps-4">
+				{{note.getText}}
+			</blockquote>
+			<span class="d-block mt-3 pt-2 border-top" style="font-size: .75rem">Player's Playtime at Time of Note:
+				{{note.getPlaytime ?? 0}}
+				minutes</span>
+		</div>
+	</div>
+	<div>
+		<span>Created during
+			{{RoundBadge(note.getRound)}}
+			at
+			{{note.getTimestamp|date}}
+			{% if note.getEdits %}
+				|
+				<i class="fas fa-pen"></i>
+				Last Edited by
+				{{PlayerBadge(note.getEditorBadge)}}
+			{% endif %}
+		</span>
+	</div>

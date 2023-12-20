@@ -1,0 +1,70 @@
+{% from 'macros.html.twig' import PlayerBadge, BanBadge, ServerBadge, RoundBadge %}
+<div class="card mb-3">
+	<h4 class="card-header d-flex justify-content-between align-items-center">
+		{% include 'bans/components/banHeader.html.twig' with {'ban': ban} %}
+	</h4>
+	<div class="card-body">{{ban.getReason}}</div>
+	{% if ban.getBanIds|length > 1 %}
+		<div class="card-footer">
+			<strong>Heads Up!</strong>
+			This ban applies to multiple roles. The following bans are grouped into this ban:
+			{{ban.getBanIds|join(', ',' and ')}}
+
+		</div>
+	{% endif %}
+</div>
+{% if 'Lifted' == ban.getStatus.value %}
+	<p>
+		<i class="fa-solid fa-user-check text-success"></i>
+		Unbanned by
+		{{PlayerBadge(ban.unbannerBadge)}}
+		<time>{{ban.unbanned_datetime|date('Y-m-d H:i:s')}}</time>
+	</p>
+{% else %}
+	<table class="table table-bordered">
+		<tbody>
+			<tr>
+				<th>Ban Placed</th>
+				<td>
+					<code>{{ban.bantime|date()}}</code>
+				</td>
+			</tr>
+			<tr>
+				<th>Ban Expires</th>
+				<td>
+					<code>{{ban.getExpiration ? ban.getExpiration|date() : 'Never'}}</code>
+				</td>
+			</tr>
+			{% if ban.getExpiration %}
+				<tr>
+					<th>Duration</th>
+					{% set diff = ban.bantime.diff(ban.getExpiration) %}
+					<td>
+						<code>{{diff|date('%y years, %d days, %h hours, %i minutes')}}</code>
+					</td>
+				</tr>
+				{% if ban.getExpiration > date() %}
+					<tr>
+						<th>Time Remaining</th>
+						{% set diff = date().diff(ban.getExpiration) %}
+						<td>
+							<code>{{diff|date('%y years, %d days, %h hours, %i minutes')}}</code>
+						</td>
+					</tr>
+				{% endif %}
+			{% else %}
+				<tr>
+					<th>Duration</th>
+					<td>
+						<code>No Expiration</code>
+					</td>
+
+				</tr>
+			{% endif %}
+			<tr>
+				<th>Status</th>
+				<td class="fw-bold table-{{ban.getStatus.getCssClass}}">{{ban.getStatus.value}}</td>
+			</tr>
+		</tbody>
+	</table>
+{% endif %}

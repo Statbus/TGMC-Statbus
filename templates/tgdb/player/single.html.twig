@@ -1,0 +1,85 @@
+{% extends 'tgdb/tgdb.html.twig' %}
+
+{% block body %}
+	{% from 'macros.html.twig' import PlayerBadge, RoundBadge, Pagination, Hotbar, BanBadge %}
+	<header class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+		<span class="fs-1 mt-0">{{PlayerBadge(player.getPlayerBadge)}}</span>
+	</header>
+	{{Hotbar(hotbar)}}
+	<div class="row">
+		<div class="col-12 col-md-4">
+			<h2 class="border-bottom">Player Information</h2>
+			<ul class="list-group">
+				<li class="list-group-item text-bg-{{standing.status.getCssClass}}">
+					<p class="mb-0">Account Standing</p>
+					<p class="mb-0 fw-bold">{{standing.status.value}}</p>
+				</li>
+				<li class="list-group-item">
+					<p class="mb-0">First Seen</p>
+					<p class="mb-0 fw-bold">{{player.getFirstSeen|date}}</p>
+				</li>
+				<li class="list-group-item">
+					<p class="mb-0">Last Seen</p>
+					<p class="mb-0 fw-bold">{{player.getLastSeen|date}}</p>
+				</li>
+				<li class="list-group-item">
+					<p class="mb-0">Last IP</p>
+					<p class="mb-0 fw-bold">
+						<span class="ipBadge">{{player.getIp(true)}}</span>
+					</p>
+				</li>
+				<li class="list-group-item">
+					<p class="mb-0">Last CID</p>
+					<p class="mb-0 fw-bold">
+						<span class="cidBadge">{{player.getcid}}</span>
+					</p>
+				</li>
+				<li class="list-group-item">
+					<p class="mb-0">Account Registered</p>
+					<p class="mb-0 fw-bold">{{player.getaccountJoinDate|date('Y-m-d')}}</p>
+				</li>
+			</ul>
+		</div>
+		<div class="col-12 col-md-4">
+			<h2 class="border-bottom d-flex justify-content-between align-items-center">
+				<span>Recent Bans</span>
+				<a href="{{url_for('tgdb.bans.ckey',{'ckey':player.getCkey})}}" class="btn btn-outline-primary btn-sm">View All</a>
+			</h2>
+			<div class="list-group">
+				{% for b in bans %}
+					<a href="{{url_for('tgdb.ban',{'id':b.getId})}}" class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                    <span>
+						{{BanBadge(b.getStatus)}}
+						<strong>Ban from
+							{{b.getRole|join(', ',' and ')}}</strong></span>
+                            <p class="mb-0 text-muted text-end" style="font-size: .85rem">{{b.getBanTime|date('Y-m-d')}}</p>
+                            </div>
+						<p class="mb-0">{{b.getReason|striptags|u.truncate(240, '[...]', false)}}</p>
+					</a>
+					{% else %}
+					<div class="list-group-item">« No bans »</div>
+				{% endfor %}
+			</div>
+		</div>
+        <div class="col-12 col-md-4">
+			<h2 class="border-bottom d-flex justify-content-between align-items-center">
+				<span>Recent Notes</span>
+				<a href="{{url_for('tgdb.notes.ckey',{'ckey':player.getCkey})}}" class="btn btn-outline-primary btn-sm">View All</a>
+			</h2>
+			<div class="list-group">
+				{% for n in notes %}
+					<a href="{{url_for('tgdb.notes.single',{'id':n.getId})}}" class="list-group-item list-group-item-{{n.getSeverity.getCssClass}}">
+                        <span class="badge text-bg-{{n.getSeverity.getCssClass}}">{{n.getSeverity.value|title}}</span> {{n.getText}}
+						{# {{BanBadge(b.getStatus)}}
+						<strong>Ban from
+							{{b.getRole|join(', ',' and ')}}</strong>
+						<p class="mb-0">{{b.getReason|striptags|u.truncate(240, '[...]', false)}}</p> #}
+					</a>
+										{% else %}
+					<div class="list-group-item">« No notes »</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{{app.name}}</title>
+		{% block stylesheets %}
+			{{ webpack_entry_link_tags('app') }}
+		{% endblock %}
+
+		{% block scripts %}
+			{{ webpack_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
+	<body>
+    {% include 'base/alerts.html.twig' %}

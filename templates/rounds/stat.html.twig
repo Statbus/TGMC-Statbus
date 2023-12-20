@@ -1,0 +1,17 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+	{% from 'macros.html.twig' import RoundBadge %}
+	<header class="d-flex align-items-center pb-3 mb-2 border-bottom">
+        <span>
+            <small class="text-muted">Statistic</small><br>
+		<span class="fs-1"><code>{{stat.getName}}</code> for {{RoundBadge(stat.getRound)}}</span>
+        </span>
+	</header>
+    {% include [
+                            'stats/key/' ~ stat.getName ~ '-' ~ stat.getVersion ~ '.html.twig', 
+                            'stats/key/' ~ stat.getName ~ '.html.twig',
+                            'stats/type/' ~ stat.getType.value ~ '.html.twig', 
+                            'stats/generic.html.twig'
+                            ] 
+                        with {'stat': stat} only %}
+{% endblock %}

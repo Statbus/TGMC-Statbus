@@ -1,0 +1,11 @@
+{% from 'macros.html.twig' import JobBadge %}
+{% for role in roles %}
+
+    {# {% set enum = enum('\\App\\Domain\\Jobs\\Data\\Jobs').tryFrom(role) %} #}
+    {% if not enum %}
+    <span class="badge text-bg-secondary">{{role}}</span>{{loop.last ? '' : ','}}
+    {% else %}
+    {{JobBadge(enum.getBadge)}}{{loop.last ? '' : ','}}
+    {% endif %}
+    
+{% endfor %}

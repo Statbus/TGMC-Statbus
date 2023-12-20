@@ -1,0 +1,107 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+	{% from 'macros.html.twig' import RoundBadge %}
+	<header class="d-flex align-items-center pb-3 mb-2 border-bottom">
+		<span class="fs-1">{{RoundBadge(round.getId, false)}}</span>
+	</header>
+	<div class="row">
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Initalized At</span>
+			<span class="fs-5">{{round.getInitDatetime|date}}</span>
+		</div>
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Startup Duration</span>
+			<span class="fs-5">{{round.getStartDuration ? round.getStartDuration|date('%H:%I:%S') : 'N/A'}}</span>
+		</div>
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Startup At</span>
+			<span class="fs-5">{{round.getStartDateTime ? round.getStartDateTime|date : 'N/A'}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Started</span>
+			<span class="fs-3 fw-bold">{{round.getStart ? round.getStart|date : 'N/A'}}</span>
+		</div>
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Round Duration</span>
+			<span class="fs-3 fw-bold">{{round.getDuration ? round.getDuration|date('%H:%I:%S') : 'N/A'}}</span>
+		</div>
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Ended</span>
+			<span class="fs-3 fw-bold">{{round.getEnd ? round.getEnd|date : 'N/A'}}</span>
+		</div>
+	</div>
+	<div class="row mb-3">
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Ended At</span>
+			<span class="fs-5">{{round.getendDateTime ? round.getendDateTime|date : 'N/A'}}</span>
+		</div>
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Duration</span>
+			<span class="fs-5">{{round.getEndDuration ? round.getEndDuration|date('%H:%I:%S') : 'N/A'}}</span>
+		</div>
+		<div class="col-6 col-md-4">
+			<span class="text-muted d-block">Shutdown At</span>
+			<span class="fs-5">{{round.getShutdownDateTime ? round.getShutdownDateTime|date : 'N/A'}}</span>
+		</div>
+	</div>
+	{% if round.crashed %}
+		<div class="alert alert-warning">This round may have crashed, or otherwise did not exit cleanly</div>
+	{% endif %}
+	<div class="row mb-3">
+		<div class="col-12 col-md-4">
+			<span class="text-muted d-block">Game Mode</span>
+			<span class="fs-5">{{round.getMode ?: 'N/A'}}</span>
+		</div>
+		<div class="col-12 col-md-4">
+			<span class="text-muted d-block">Result</span>
+			<span class="fs-5">
+				<span class="badge text-bg-{{round.getResultClass.class}}">{{round.getResult}}</span>
+			</span>
+		</div>
+		<div class="col-12 col-md-4">
+			<span class="text-muted d-block">Map</span>
+			<span class="fs-5">{{round.getMap ?: 'N/A'}}</span>
+		</div>
+	</div>
+	<section>
+		<header class="d-flex align-items-center mb-2 border-bottom">
+			<h2>Stats</h2>
+		</header>
+		<div class="row">
+			<div class="col-12 col-md-6 col-lg-3">
+				<ul class="nav nav-pills flex-column sticky-top">
+					{% for s in stats %}
+						<li class="nav-item">
+							<a href="#" class="nav-link d-flex align-items-center justify-content-between" data-bs-toggle="tab" data-bs-target="#tab-{{s.getName}}" type="button" role="tab" aria-controls="tab-{{s.getName}}" id="tab-link-{{s.getName}}">
+								<code>{{s.getName}}</code>
+								<small class="text-muted">{{s.getType.value|title}}</small>
+							</a>
+						</li>
+                        {% else %}
+                        <li class="nav-item text-center">« No stats for this round »</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="col-12 col-md-6 col-lg-9 tab-content">
+				{% for s in stats %}
+					<div id="tab-{{s.getName}}" role="tabpanel" aria-labelledby="tab-link-{{s.getName}}" class="tab-pane fade">
+						<div class="card">
+							<h4 class="card-header"><a href="{{url_for('round.stat',{round: round.getid, name: s.getName})}}">{{s.getName}}</a></h4>
+							<div class="card-body">
+								{% include [
+                            'stats/key/' ~ s.getName ~ '-' ~ s.getVersion ~ '.html.twig', 
+                            'stats/key/' ~ s.getName ~ '.html.twig',
+                            'stats/type/' ~ s.getType.value ~ '.html.twig', 
+                            'stats/generic.html.twig'
+                            ] 
+                        with {'stat': s} only %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+{% endblock %}

@@ -1,0 +1,75 @@
+$theme-colors: map-merge($theme-colors, (
+  "perma": $pink-400
+));
+
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+
+$theme-colors-text: map-merge($theme-colors-text, (
+  "perma": $pink-400
+));
+
+$theme-colors-bg-subtle: map-merge($theme-colors-bg-subtle, (
+  "perma": $pink-100
+));
+
+$theme-colors-border-subtle: map-merge($theme-colors-border-subtle, (
+  "perma": $pink-400
+));
+
+$utilities-bg: map-merge($utilities-colors,(
+  "perma": $pink-400
+));
+
+$theme-colors-bg-subtle: map-merge($theme-colors-bg-subtle, (
+  "perma": $pink-400
+));
+
+.ipBadge {
+  border-radius: 1rem;
+  border: 3px solid $primary;
+  padding: 0 .25rem 0 0;
+  font-size: .85rem;
+  font-weight: bold;
+  color: $primary;
+  &::before{
+      background: $primary;
+      color: $white;
+      content: 'IP: ';
+      padding-left: .25rem;
+      margin-right: .25rem;
+  }
+}
+
+.cidBadge {
+  border-radius: 1rem;
+  border: 3px solid $success;
+  padding: 0 .25rem 0 0;
+  font-size: .85rem;
+  font-weight: bold;
+  color: $success;
+  &::before{
+      background: $success;
+      color: $white;
+      content: 'CID: ';
+      padding-left: .25rem;
+      margin-right: .25rem;
+  }
+}
+
+.bg-perma-subtle {
+  background-color: $pink-100 !important;
+}
+
+.border-perma {
+  --bs-border-opacity: 1;
+  border-color:$pink-400 !important;
+}
+
+.border-perma-subtle {
+  --bs-border-opacity: 1;
+  border-color: $pink-100 !important;
+}
+
+.text-perma-emphasis {
+  color: $pink-700 !important;
+}

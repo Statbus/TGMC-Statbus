@@ -1,0 +1,40 @@
+{% extends 'index.html.twig' %}
+{% block body %}
+	<div class="card mb-3">
+		<h3 class="card-header text-bg-danger">{{app.name}}
+			Error</h3>
+			<div class="card-body">
+		{% include [
+				'errors/exceptions/' ~ error.type|join('/') ~ '.html.twig',
+				'errors/' ~ error.getCode ~ '.html.twig', 
+				'errors/generic.html.twig'
+			] ignore missing %}
+		Request URL -
+		<code>{{error.url}}</code><br>
+		Request ID -
+		<code>{{error.request_id}}</code><br>
+		<span style="font-size: .75rem">Please include the above information when reporting this issue</span>
+		</div>
+	</div>
+	{% if display_error_details %}
+		<div class="card">
+			<div class="card-header">
+				<code>{{error.file}}:{{error.line}}</code>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<strong>{{error.message}}<br>
+						<code>{{error.file}}:{{error.line}}</code>
+					</strong>
+				</li>
+				{% for e in error.trace %}
+					<li class="list-group-item">
+						<code>{{e.file}}:{{e.line}}</code><br>
+						<span class="font-monospace">{{e.class}}{{e.type}}{{e.function}}</span>
+					</li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	{% endif %}
+{% endblock %}

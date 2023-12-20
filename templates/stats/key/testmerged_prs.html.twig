@@ -1,0 +1,5 @@
+<ul class="list-group">
+{% for data in stat.getData %}
+  <a  class="list-group-item" href="https://github.com/tgstation/TerraGov-Marine-Corps/pull/{{data.number}}" target="_blank"><i class="fas fa-external-link-alt"></i> {{data.title}} by {{data.author}}</a>
+{% endfor %}
+</ul>

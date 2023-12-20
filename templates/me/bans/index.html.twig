@@ -1,0 +1,16 @@
+{% extends 'index.html.twig' %}
+
+{% block body %}
+	{% from 'macros.html.twig' import Pagination, Playerbadge, empty %}
+	<header class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+		<span class="fs-4 mb-0">My Bans</span>
+		<span style="font-size: .75rem">Expired and Lifted bans are collapsed, click for details</span>
+	</header>
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url, 'mb-3',false)}}
+	{% for b in bans %}
+		{% include 'bans/components/listEntry.html.twig' with {'dest':'me.ban'} %}
+	{% else %}
+    {{empty("No Bans")}}
+	{% endfor %}
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url, '', false)}}
+{% endblock %}

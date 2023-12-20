@@ -1,0 +1,43 @@
+{% from 'macros.html.twig' import PlayerBadge, RoundBadge %}
+<div class="card hover mb-4 border-{{n.getSeverity.getCssClass}}">
+	<div class="card-header text-bg-{{n.getSeverity.getCssClass}} d-flex justify-content-between">
+		<span>
+			{% if n.isSecret %}
+				<span class="badge text-bg-danger">SECRET</span>
+			{% endif %}
+			{{n.getSeverity.getText}}
+			{{n.getType.value|title}}
+			for
+			{{PlayerBadge(n.getTargetBadge)}}
+			by
+			{{PlayerBadge(n.getAdminBadge)}}</span>
+		<span>
+			Expires:
+			{{n.getExpiration ? n.getExpiration|date : 'No Expiration'}}
+		</span>
+	</div>
+	<div class="card-body">
+		{{n.getText}}
+		{% if n.getPlaytime > 0 %}
+		<span class="d-block mt-3 pt-2 border-top" style="font-size: .75rem">Player's Playtime at Time of Note:
+			{{n.getPlaytime}}
+			minutes</span>
+		{% endif %}
+	</div>
+	<div class="card-footer d-flex justify-content-between">
+		<span>Created during
+			{{RoundBadge(n.getRound)}}
+			at
+			{{n.getTimestamp|date}}
+			{% if n.getEdits %}
+				|
+				<i class="fas fa-pen"></i>
+				Last Edited by
+				{{PlayerBadge(n.getEditorBadge)}}
+			{% endif %}
+		</span>
+		<a href="{{url_for(dest,{'id':n.getId})}}" class="icon-link stretched-link">
+			<i class="fas {{n.getType.getIcon}}"></i>
+			{{n.getId}}</a>
+	</div>
+</div>

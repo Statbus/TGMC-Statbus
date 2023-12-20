@@ -1,0 +1,19 @@
+{% extends 'tgdb/tgdb.html.twig' %}
+
+{% block body %}
+	{% from 'macros.html.twig' import Pagination %}
+	<header class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom">
+			<span class="fs-4">All Notes</span>
+	</header>
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url)}}
+	{% set lastdate = notes[0].getTimestamp|date('Y-m-d') %}
+	<h3 class="border-bottom mb-3">{{lastdate}}</h3>
+	{% for n in notes %}
+		{% if n.getTimestamp|date('Y-m-d') != lastdate %}
+			{% set lastdate = n.getTimestamp|date('Y-m-d') %}
+			<h3 class="border-bottom mb-3">{{lastdate}}</h3>
+		{% endif %}
+		{% include 'notes/components/noteListEntry.html.twig' with {'dest': 'tgdb.notes.single','params':{'id':n.getId}} %}
+	{% endfor %}
+	{{Pagination(pagination.pages, pagination.currentPage, pagination.url)}}
+{% endblock %}

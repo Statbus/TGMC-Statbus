@@ -1,0 +1,9 @@
+{% if not dest %}
+{% set dest = 'tgdb.ban' %}
+{% endif %}
+<div class="card hover mb-3 border border-{{b.getStatus.getcssclass}}">
+	<div class="card-header d-flex justify-content-between align-items-center">{% include 'bans/components/banHeader.html.twig' with {'ban': b, 'dest': dest,'params':{'id':b.getId}} %}</div>
+	{% if b.getStatus.value in ['Permanent','Active'] %}
+		<div class="card-body">{{b.getReason}}</div>
+	{% endif %}
+</div>

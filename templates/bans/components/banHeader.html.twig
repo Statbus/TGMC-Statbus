@@ -1,0 +1,21 @@
+{% from 'macros.html.twig' import PlayerBadge, BanBadge %}
+<div>
+
+{% if dest %}	
+	<a href="{{url_for(dest,params)}}" class="icon-link stretched-link">
+		<i class="fas fa-gavel"></i>
+		{{ban.getId}}</a>
+{% else %}
+<i class="fas fa-gavel"></i>
+		{{ban.getId}}
+		{% endif %}
+	{{PlayerBadge(ban.getPlayerBadge)}}
+	has
+	{{ban.getStatus.getArticle}}
+	{{BanBadge(ban.getStatus)}}
+	ban from
+	{% include 'bans/components/roleList.html.twig' with {'roles': ban.getrole} only %} by {{PlayerBadge(ban.getAdminbadge)}}
+</div>
+<div class="flex-shrink-0">
+	{{ban.bantime|date()}}
+</div>

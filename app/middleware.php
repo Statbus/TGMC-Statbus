@@ -1,0 +1,15 @@
+<?php
+
+use Middlewares\TrailingSlash;
+use Slim\App;
+use Slim\Middleware\ErrorMiddleware;
+use Slim\Views\TwigMiddleware;
+use Slim\Views\Twig;
+
+return function (App $app) {
+    $app->addBodyParsingMiddleware();
+    $app->addRoutingMiddleware();
+    $app->add(TwigMiddleware::create($app, $app->getContainer()->get(Twig::class)));
+    $app->add(ErrorMiddleware::class);
+    $app->add(new TrailingSlash());
+};
